@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NECTEC - AI Text Streaming</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to right, #0d47a1, #1976d2);
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            color: black;
+        }
+
+        h1 {
+            color: #0d47a1;
+        }
+
+        input[type="text"] {
+            width: 80%;
+            padding: 10px;
+            margin-top: 10px;
+            border: 2px solid #0d47a1;
+            border-radius: 5px;
+            font-size: 16px;
+            outline: none;
+        }
+
+        input[type="text"]:focus {
+            border-color: #1976d2;
+            box-shadow: 0 0 5px #1976d2;
+        }
+
+        button {
+            background: #0d47a1;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            margin: 10px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background: #1976d2;
+        }
+
+        .stream-container {
+            background: #eeeeee;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            text-align: left;
+            max-height: 250px;
+            overflow-y: auto;
+            font-size: 16px;
+            color: black;
+            white-space: pre-wrap;
+        }
+
+        .nectec-logo {
+            width: 100px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <img src="data:image/png;base64,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" class="nectec-logo" alt="NECTEC Logo">
+        <h1>NECTEC - AI Text Streaming</h1>
+        <label for="messageInput">Enter your prompt:</label>
+        <input type="text" id="messageInput" placeholder="Type something...">
+        <br>
+        <button id="streambtn">Start Streaming</button>
+        <button id="closebtn" style="background: red;">Close Connection</button>
+        <div class="stream-container" id="container"></div>
+    </div>
+
+    <script>
+        const streamButton = document.getElementById('streambtn');
+        const closeButton = document.getElementById('closebtn');
+        const container = document.getElementById('container');
+        const input = document.getElementById('messageInput');
+
+        let ws;
+        let retryCount = 0;
+        const maxRetries = 5;
+        let isError = false;
+
+        function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        function connectWebSocket() {
+            ws = new WebSocket("ws://localhost:8000/generate/text/streams"); 
+
+            ws.onopen = handleOpen;
+            ws.onmessage = handleMessage;
+            ws.onclose = handleClose;
+            ws.onerror = handleError; 
+        }
+
+        function handleOpen() {
+            console.log("✅ WebSocket connection opened");
+            retryCount = 0;
+            isError = false;
+            container.innerHTML = `<p style="color: green;">Connected to NECTEC AI!</p>`;
+        }
+
+        function handleMessage(event) {
+            let lastMessage = container.lastElementChild;
+    
+    // If there's no existing message, create one
+            if (!lastMessage) {
+                lastMessage = document.createElement("p");
+                container.appendChild(lastMessage);
+            }
+
+            // Append new streamed data to the last message
+            lastMessage.innerHTML += event.data;
+            container.scrollTop = container.scrollHeight; // Auto-scroll
+        }
+
+        async function handleClose() { 
+            console.log("⚠️ WebSocket connection closed");
+            container.innerHTML += `<p style="color: red;">Connection lost. Retrying...</p>`;
+            
+            if (isError && retryCount < maxRetries) {
+                console.warn("Retrying connection...");
+                await sleep(Math.pow(2, retryCount) * 1000);
+                retryCount++;
+                connectWebSocket();
+            } else if (isError) {
+                console.error("❌ Max retries reached. Could not reconnect.");
+                container.innerHTML += `<p style="color: red;">Max retries reached. Please refresh.</p>`;
+            }
+        }
+
+        function handleError(error) {
+            console.error("WebSocket error:", error);
+            isError = true;
+            ws.close();
+        }
+
+        function resetForm(){
+            input.value = '';
+        }
+
+        streamButton.addEventListener('click', function() { 
+            const prompt = document.getElementById("messageInput").value;
+            if (prompt && ws && ws.readyState === WebSocket.OPEN) {
+                ws.send(prompt); 
+                container.innerHTML += `<p style="color: blue;">You: ${prompt} \n\n</p>`;
+            }
+            resetForm(); 
+        });
+
+        closeButton.addEventListener('click', function() { 
+            isError = false;
+            if (ws) {
+                ws.close();
+                container.innerHTML += `<p style="color: red;">Disconnected.</p>`;
+            }
+        });
+
+        connectWebSocket(); 
+    </script>
+</body>
+</html>
