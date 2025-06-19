@@ -2,7 +2,7 @@
 
 # 🦙 LANTA Ollama WebSocket Streamer
 
-A real-time text-streaming service using [Ollama](https://ollama.com), FastAPI, and WebSockets.
+A real-time text-streaming service using [Ollama](https://ollama.com), FastAPI, and WebSockets on LANTA Thailand's Supercomputer.
 Users can send prompts from a simple HTML front-end and see the model’s response appear letter-by-letter.
 
 ---
