@@ -1,0 +1,1 @@
+# lanta-fastapi-ollama-websocket
